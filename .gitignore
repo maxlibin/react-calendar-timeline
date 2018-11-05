@@ -5,7 +5,9 @@ bower_components
 .idea
 .sass-cache
 modules
-
+build
+gh-pages
+/lib
 # vscode stuff
 .vscode
 
