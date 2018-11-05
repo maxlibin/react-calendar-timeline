@@ -5,6 +5,7 @@ import GroupRow from './GroupRow'
 export default class GroupRows extends Component {
   static propTypes = {
     canvasWidth: PropTypes.number.isRequired,
+    selected: PropTypes.number,
     lineCount: PropTypes.number.isRequired,
     groupHeights: PropTypes.array.isRequired,
     onRowClick: PropTypes.func.isRequired,
@@ -20,13 +21,15 @@ export default class GroupRows extends Component {
       nextProps.canvasWidth === this.props.canvasWidth &&
       nextProps.lineCount === this.props.lineCount &&
       nextProps.groupHeights === this.props.groupHeights &&
-      nextProps.groups === this.props.groups
+      nextProps.groups === this.props.groups && 
+      nextProps.selected === this.props.selected
     )
   }
 
   render() {
     const {
       canvasWidth,
+      selected,
       lineCount,
       groupHeights,
       onRowClick,
@@ -38,9 +41,12 @@ export default class GroupRows extends Component {
     } = this.props
     let lines = []
 
+    console.log(selected);
+
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <GroupRow
+          selected={selected}
           clickTolerance={clickTolerance}
           onContextMenu={evt => onRowContextClick(evt, i)}
           onClick={evt => onRowClick(evt, i)}

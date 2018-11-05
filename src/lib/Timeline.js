@@ -742,8 +742,13 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   rows(canvasWidth, groupHeights, groups) {
+    const currentItem = this.props.items.find(item => this.state.selectedItem === item.id);
+    
+    const currentItemGroup = currentItem && currentItem.group - 0;
+
     return (
       <GroupRows
+        selected={currentItemGroup}
         groups={groups}
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}
