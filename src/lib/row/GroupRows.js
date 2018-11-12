@@ -41,8 +41,6 @@ export default class GroupRows extends Component {
     } = this.props
     let lines = []
 
-    console.log(selected);
-
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <GroupRow
