@@ -31,213 +31,6 @@ import { TimelineStateProvider } from './timeline/TimelineStateContext'
 import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 
 export default class ReactCalendarTimeline extends Component {
-  static propTypes = {
-    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    sidebarWidth: PropTypes.number,
-    sidebarContent: PropTypes.node,
-    rightSidebarWidth: PropTypes.number,
-    rightSidebarContent: PropTypes.node,
-    rightSidebarStack: PropTypes.bool,
-    dragSnap: PropTypes.number,
-    minResizeWidth: PropTypes.number,
-    stickyOffset: PropTypes.number,
-    stickyHeader: PropTypes.bool,
-    lineHeight: PropTypes.number,
-    headerLabelGroupHeight: PropTypes.number,
-    headerLabelHeight: PropTypes.number,
-    itemHeightRatio: PropTypes.number,
-
-    minZoom: PropTypes.number,
-    maxZoom: PropTypes.number,
-
-    clickTolerance: PropTypes.number,
-
-    canChangeGroup: PropTypes.bool,
-    canMove: PropTypes.bool,
-    canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
-    useResizeHandle: PropTypes.bool,
-    canSelect: PropTypes.bool,
-
-    stackItems: PropTypes.bool,
-
-    traditionalZoom: PropTypes.bool,
-
-    itemTouchSendsClick: PropTypes.bool,
-
-    horizontalLineClassNamesForGroup: PropTypes.func,
-
-    onItemMove: PropTypes.func,
-    onItemResize: PropTypes.func,
-    onItemClick: PropTypes.func,
-    onItemSelect: PropTypes.func,
-    onItemDeselect: PropTypes.func,
-    onCanvasClick: PropTypes.func,
-    onItemDoubleClick: PropTypes.func,
-    onItemContextMenu: PropTypes.func,
-    onCanvasDoubleClick: PropTypes.func,
-    onCanvasContextMenu: PropTypes.func,
-    onZoom: PropTypes.func,
-
-    moveResizeValidator: PropTypes.func,
-
-    itemRenderer: PropTypes.func,
-    groupRenderer: PropTypes.func,
-
-    style: PropTypes.object,
-
-    keys: PropTypes.shape({
-      groupIdKey: PropTypes.string,
-      groupTitleKey: PropTypes.string,
-      groupRightTitleKey: PropTypes.string,
-      itemIdKey: PropTypes.string,
-      itemTitleKey: PropTypes.string,
-      itemDivTitleKey: PropTypes.string,
-      itemGroupKey: PropTypes.string,
-      itemTimeStartKey: PropTypes.string,
-      itemTimeEndKey: PropTypes.string
-    }),
-    headerRef: PropTypes.func,
-    scrollRef: PropTypes.func,
-
-    timeSteps: PropTypes.shape({
-      second: PropTypes.number,
-      minute: PropTypes.number,
-      hour: PropTypes.number,
-      day: PropTypes.number,
-      month: PropTypes.number,
-      year: PropTypes.number
-    }),
-
-    defaultTimeStart: PropTypes.object,
-    defaultTimeEnd: PropTypes.object,
-
-    visibleTimeStart: PropTypes.number,
-    visibleTimeEnd: PropTypes.number,
-    onTimeChange: PropTypes.func,
-    onBoundsChange: PropTypes.func,
-
-    selected: PropTypes.array,
-
-    headerLabelFormats: PropTypes.shape({
-      yearShort: PropTypes.string,
-      yearLong: PropTypes.string,
-      monthShort: PropTypes.string,
-      monthMedium: PropTypes.string,
-      monthMediumLong: PropTypes.string,
-      monthLong: PropTypes.string,
-      dayShort: PropTypes.string,
-      dayLong: PropTypes.string,
-      hourShort: PropTypes.string,
-      hourMedium: PropTypes.string,
-      hourMediumLong: PropTypes.string,
-      hourLong: PropTypes.string
-    }),
-
-    subHeaderLabelFormats: PropTypes.shape({
-      yearShort: PropTypes.string,
-      yearLong: PropTypes.string,
-      monthShort: PropTypes.string,
-      monthMedium: PropTypes.string,
-      monthLong: PropTypes.string,
-      dayShort: PropTypes.string,
-      dayMedium: PropTypes.string,
-      dayMediumLong: PropTypes.string,
-      dayLong: PropTypes.string,
-      hourShort: PropTypes.string,
-      hourLong: PropTypes.string,
-      minuteShort: PropTypes.string,
-      minuteLong: PropTypes.string
-    }),
-
-    resizeDetector: PropTypes.shape({
-      addListener: PropTypes.func,
-      removeListener: PropTypes.func
-    }),
-
-    verticalLineClassNamesForTime: PropTypes.func,
-
-    children: PropTypes.node
-  }
-
-  static defaultProps = {
-    sidebarWidth: 150,
-    rightSidebarWidth: 0,
-    rightSidebarStack: false,
-    dragSnap: 1000 * 60 * 15, // 15min
-    minResizeWidth: 20,
-    stickyOffset: 0,
-    stickyHeader: true,
-    lineHeight: 30,
-    headerLabelGroupHeight: 30,
-    headerLabelHeight: 30,
-    itemHeightRatio: 0.65,
-
-    minZoom: 60 * 60 * 1000, // 1 hour
-    maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
-
-    clickTolerance: 3, // how many pixels can we drag for it to be still considered a click?
-
-    canChangeGroup: true,
-    canMove: true,
-    canResize: 'right',
-    useResizeHandle: false,
-    canSelect: true,
-
-    stackItems: false,
-
-    traditionalZoom: false,
-
-    horizontalLineClassNamesForGroup: null,
-
-    onItemMove: null,
-    onItemResize: null,
-    onItemClick: null,
-    onItemSelect: null,
-    onItemDeselect: null,
-    onCanvasClick: null,
-    onItemDoubleClick: null,
-    onItemContextMenu: null,
-    onZoom: null,
-
-    verticalLineClassNamesForTime: null,
-
-    moveResizeValidator: null,
-
-    dayBackground: null,
-
-    defaultTimeStart: null,
-    defaultTimeEnd: null,
-
-    itemTouchSendsClick: false,
-
-    style: {},
-    keys: defaultKeys,
-    timeSteps: defaultTimeSteps,
-    headerRef: () => {},
-    scrollRef: () => {},
-
-    // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
-    // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
-    visibleTimeStart: null,
-    visibleTimeEnd: null,
-    onTimeChange: function(
-      visibleTimeStart,
-      visibleTimeEnd,
-      updateScrollCanvas
-    ) {
-      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
-    },
-    // called when the canvas area of the calendar changes
-    onBoundsChange: null,
-    children: null,
-
-    headerLabelFormats: defaultHeaderLabelFormats,
-    subHeaderLabelFormats: defaultSubHeaderLabelFormats,
-
-    selected: null
-  }
-
   static childContextTypes = {
     getTimelineContext: PropTypes.func
   }
@@ -332,7 +125,11 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     windowResizeDetector.addListener(this)
-
+    if (this.props.defaultSelectedItem) {
+      this.setState({
+        selectedItem: this.props.defaultSelectedItem
+      });
+    }
     this.lastTouchDistance = null
   }
 
@@ -770,7 +567,7 @@ export default class ReactCalendarTimeline extends Component {
     minUnit,
     dimensionItems,
     groupHeights,
-    groupTops
+    groupTops,
   ) {
     return (
       <Items
@@ -964,7 +761,7 @@ export default class ReactCalendarTimeline extends Component {
       width,
       visibleTimeStart,
       visibleTimeEnd,
-      canvasTimeStart
+      canvasTimeStart,
     } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
@@ -975,7 +772,6 @@ export default class ReactCalendarTimeline extends Component {
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
     const isInteractingWithItem = !!draggingItem || !!resizingItem
-
     if (isInteractingWithItem) {
       const stackResults = stackItems(
         items,
@@ -1026,10 +822,10 @@ export default class ReactCalendarTimeline extends Component {
 
               <div style={outerComponentStyle} className="rct-outer">
               <ScrollElement
-              scrollRef={el => {
-                this.props.scrollRef(el);
-                this.scrollComponent = el
-              }}
+                scrollRef={el => {
+                  this.props.scrollRef(el);
+                  this.scrollComponent = el
+                }}
                 width={width}
                 height={height}
                 onZoom={this.changeZoom}
@@ -1084,4 +880,213 @@ export default class ReactCalendarTimeline extends Component {
       </TimelineStateProvider>
     )
   }
+}
+
+ReactCalendarTimeline.propTypes = {
+  groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  sidebarWidth: PropTypes.number,
+  sidebarContent: PropTypes.node,
+  rightSidebarWidth: PropTypes.number,
+  rightSidebarContent: PropTypes.node,
+  rightSidebarStack: PropTypes.bool,
+  dragSnap: PropTypes.number,
+  minResizeWidth: PropTypes.number,
+  stickyOffset: PropTypes.number,
+  stickyHeader: PropTypes.bool,
+  defaultSelectedItem: PropTypes.number,
+  lineHeight: PropTypes.number,
+  headerLabelGroupHeight: PropTypes.number,
+  headerLabelHeight: PropTypes.number,
+  itemHeightRatio: PropTypes.number,
+
+  minZoom: PropTypes.number,
+  maxZoom: PropTypes.number,
+
+  clickTolerance: PropTypes.number,
+
+  canChangeGroup: PropTypes.bool,
+  canMove: PropTypes.bool,
+  canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
+  useResizeHandle: PropTypes.bool,
+  canSelect: PropTypes.bool,
+
+  stackItems: PropTypes.bool,
+
+  traditionalZoom: PropTypes.bool,
+
+  itemTouchSendsClick: PropTypes.bool,
+
+  horizontalLineClassNamesForGroup: PropTypes.func,
+
+  onItemMove: PropTypes.func,
+  onItemResize: PropTypes.func,
+  onItemClick: PropTypes.func,
+  onItemSelect: PropTypes.func,
+  onItemDeselect: PropTypes.func,
+  onCanvasClick: PropTypes.func,
+  onItemDoubleClick: PropTypes.func,
+  onItemContextMenu: PropTypes.func,
+  onCanvasDoubleClick: PropTypes.func,
+  onCanvasContextMenu: PropTypes.func,
+  onZoom: PropTypes.func,
+
+  moveResizeValidator: PropTypes.func,
+
+  itemRenderer: PropTypes.func,
+  groupRenderer: PropTypes.func,
+
+  style: PropTypes.object,
+
+  keys: PropTypes.shape({
+    groupIdKey: PropTypes.string,
+    groupTitleKey: PropTypes.string,
+    groupRightTitleKey: PropTypes.string,
+    itemIdKey: PropTypes.string,
+    itemTitleKey: PropTypes.string,
+    itemDivTitleKey: PropTypes.string,
+    itemGroupKey: PropTypes.string,
+    itemTimeStartKey: PropTypes.string,
+    itemTimeEndKey: PropTypes.string
+  }),
+  headerRef: PropTypes.func,
+  scrollRef: PropTypes.func,
+
+  timeSteps: PropTypes.shape({
+    second: PropTypes.number,
+    minute: PropTypes.number,
+    hour: PropTypes.number,
+    day: PropTypes.number,
+    month: PropTypes.number,
+    year: PropTypes.number
+  }),
+
+  defaultTimeStart: PropTypes.object,
+  defaultTimeEnd: PropTypes.object,
+
+  visibleTimeStart: PropTypes.number,
+  visibleTimeEnd: PropTypes.number,
+  onTimeChange: PropTypes.func,
+  onBoundsChange: PropTypes.func,
+
+  selected: PropTypes.array,
+
+  headerLabelFormats: PropTypes.shape({
+    yearShort: PropTypes.string,
+    yearLong: PropTypes.string,
+    monthShort: PropTypes.string,
+    monthMedium: PropTypes.string,
+    monthMediumLong: PropTypes.string,
+    monthLong: PropTypes.string,
+    dayShort: PropTypes.string,
+    dayLong: PropTypes.string,
+    hourShort: PropTypes.string,
+    hourMedium: PropTypes.string,
+    hourMediumLong: PropTypes.string,
+    hourLong: PropTypes.string
+  }),
+
+  subHeaderLabelFormats: PropTypes.shape({
+    yearShort: PropTypes.string,
+    yearLong: PropTypes.string,
+    monthShort: PropTypes.string,
+    monthMedium: PropTypes.string,
+    monthLong: PropTypes.string,
+    dayShort: PropTypes.string,
+    dayMedium: PropTypes.string,
+    dayMediumLong: PropTypes.string,
+    dayLong: PropTypes.string,
+    hourShort: PropTypes.string,
+    hourLong: PropTypes.string,
+    minuteShort: PropTypes.string,
+    minuteLong: PropTypes.string
+  }),
+
+  resizeDetector: PropTypes.shape({
+    addListener: PropTypes.func,
+    removeListener: PropTypes.func
+  }),
+
+  verticalLineClassNamesForTime: PropTypes.func,
+
+  children: PropTypes.node
+}
+
+ReactCalendarTimeline.defaultProps = {
+  sidebarWidth: 150,
+  rightSidebarWidth: 0,
+  rightSidebarStack: false,
+  dragSnap: 1000 * 60 * 15, // 15min
+  minResizeWidth: 20,
+  stickyOffset: 0,
+  stickyHeader: true,
+  defaultSelectedItem: null,
+  lineHeight: 30,
+  headerLabelGroupHeight: 30,
+  headerLabelHeight: 30,
+  itemHeightRatio: 0.65,
+
+  minZoom: 60 * 60 * 1000, // 1 hour
+  maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
+
+  clickTolerance: 3, // how many pixels can we drag for it to be still considered a click?
+
+  canChangeGroup: true,
+  canMove: true,
+  canResize: 'right',
+  useResizeHandle: false,
+  canSelect: true,
+
+  stackItems: false,
+
+  traditionalZoom: false,
+
+  horizontalLineClassNamesForGroup: null,
+
+  onItemMove: null,
+  onItemResize: null,
+  onItemClick: null,
+  onItemSelect: null,
+  onItemDeselect: null,
+  onCanvasClick: null,
+  onItemDoubleClick: null,
+  onItemContextMenu: null,
+  onZoom: null,
+
+  verticalLineClassNamesForTime: null,
+
+  moveResizeValidator: null,
+
+  dayBackground: null,
+
+  defaultTimeStart: null,
+  defaultTimeEnd: null,
+
+  itemTouchSendsClick: false,
+
+  style: {},
+  keys: defaultKeys,
+  timeSteps: defaultTimeSteps,
+  headerRef: () => {},
+  scrollRef: () => {},
+
+  // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
+  // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
+  visibleTimeStart: null,
+  visibleTimeEnd: null,
+  onTimeChange: function(
+    visibleTimeStart,
+    visibleTimeEnd,
+    updateScrollCanvas
+  ) {
+    updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+  },
+  // called when the canvas area of the calendar changes
+  onBoundsChange: null,
+  children: null,
+
+  headerLabelFormats: defaultHeaderLabelFormats,
+  subHeaderLabelFormats: defaultSubHeaderLabelFormats,
+
+  selected: null
 }

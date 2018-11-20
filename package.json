@@ -1,6 +1,6 @@
 {
   "name": "max-react-calendar-timeline",
-  "version": "0.20.2",
+  "version": "0.20.3",
   "description": "max react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
