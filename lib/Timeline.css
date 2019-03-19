@@ -136,7 +136,7 @@
 
 .react-calendar-timeline .rct-cursor-line {
   position: absolute;
-  width: 2px;
+  width: 1px;
   background: #2196f3;
   z-index: 51; }
 

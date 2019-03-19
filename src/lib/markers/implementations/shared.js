@@ -7,7 +7,7 @@ const criticalStyles = {
   position: 'absolute',
   top: 0,
   bottom: 0,
-  width: '2px',
+  width: '1px',
   backgroundColor: '#d00000',
   // by default, pointer events (specifically click) will
   // "pass through".  This is added so that CursorMarker
